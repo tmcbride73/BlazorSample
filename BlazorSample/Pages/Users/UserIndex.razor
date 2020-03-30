@@ -5,36 +5,33 @@
 
 <MatHeadline3>User List</MatHeadline3>
 
-<MatBody1>This component demonstrates fetching data from a service.</MatBody1>
+<MatBody1>Current list of users.</MatBody1>
 
 @if (users == null)
 {
-    <MatBody1><em>Loading...</em></MatBody1>
+<MatBody1><em>Loading...</em></MatBody1>
 }
 else
 {
-<p>
-    <MatButton Link="/users/create" Raised="true"><MatIcon Style="margin-right:5px" Icon="@MatIconNames.Create" />  Create</MatButton>
-</p>
 
-<MatTable Items="@users" LoadInitialData="true" Striped="true" RequestApiOnlyOnce="true"  AllowSelection="true" RowClass=""
-                  ApiUrl="" FilterByColumnName="FirstName" DebounceMilliseconds="150" class="mat-elevation-z5">
+<MatTable SearchTermFieldLabel="Search By First Name" SearchTermFieldPlaceHolder="First Name" PageSize="12" Items="@users" LoadInitialData="true" Striped="true" RequestApiOnlyOnce="true" AllowSelection="true" RowClass=""
+          ApiUrl="" FilterByColumnName="FirstName" DebounceMilliseconds="150" class="mat-elevation-z2 w-100">
     <MatTableHeader>
-        <th style="width:15%">User ID</th>
-        <th style="width:15%">First Name</th>
-        <th style="width:15%">Last Name</th>
-        <th style="width:15%">Department</th>
-        <th style="width:15%">Phone Number</th>
-        <th style="width:0">Controls</th>
+        <th>User ID</th>
+        <th>First Name</th>
+        <th>Last Name</th>
+        <th>Department</th>
+        <th>Phone Number</th>
+        <th>Controls</th>
     </MatTableHeader>
     <MatTableRow>
-        <td style="width:15%">@context.UserId</td>
-        <td style="width:15%">@context.FirstName</td>
-        <td style="width:15%">@context.LastName</td>
-        <td style="width:15%">@context.Department</td>
-        <td style="width:15%">@context.PhoneNumber</td>
-        <td style="width:0">
-            <MatButton Style="background-color:cadetblue" Raised="true" Link="@CreateViewLink(context)"><MatIcon Style="margin-right:5px" Icon="@MatIconNames.Visibility" />Details</MatButton>
+        <td style="width:20%">@context.UserId</td>
+        <td style="width:20%">@context.FirstName</td>
+        <td style="width:20%">@context.LastName</td>
+        <td style="width:20%">@context.Department</td>
+        <td style="width:20%">@context.PhoneNumber</td>
+        <td style="width:unset">
+                <MatButton Style="background-color:cadetblue" Raised="true" Link="@CreateViewLink(context)"><MatIcon Style="margin-right:5px" Icon="@MatIconNames.Visibility" />Details</MatButton>
         </td>
     </MatTableRow>
 </MatTable>

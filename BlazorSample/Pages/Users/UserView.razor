@@ -59,70 +59,80 @@ else
 <hr />
 
 <p>
+
     @if (isViewing)
     {
         <MatButton Style="background-color:cadetblue" Raised="true" OnClick="ToggleEditing"><MatIcon Icon="@MatIconNames.Edit" />  Edit</MatButton>
     }
     else
     {
-        <MatButton Style="background-color:cadetblue" Raised="true" OnClick="SubmitForm"><MatIcon Style="margin-right:5px" Icon="@MatIconNames.Done" />  Submit</MatButton>
+
+    <p>
         <MatButton Style="background-color:cadetblue" Raised="true" OnClick="ToggleEditing"><MatIcon Style="margin-right:5px" Icon="@MatIconNames.Cancel" />  Cancel Edit</MatButton>
         <MatButton Style="background-color:darkred" Raised="true" OnClick="OpenDeleteDialog"><MatIcon Style="margin-right:5px" Icon="@MatIconNames.Delete" />  Delete</MatButton>
-    }
-
-</p>
-
-<MatDialog @bind-IsOpen="@deleteDialogIsOpen">
-    <MatDialogTitle>Are you Sure?</MatDialogTitle>
-    <MatDialogContent>
-        <p>Do you really want to delete @user.UserId</p>
-    </MatDialogContent>
-    <MatDialogActions>
-        <MatButton OnClick="@(e => { deleteDialogIsOpen = false; })" Style="margin-right:4px">Cancel</MatButton>
-        <MatButton OnClick="@DeleteUser">Delete</MatButton>
-    </MatDialogActions>
-</MatDialog>
-
-@code {
-    [Parameter] public string UserId { get; set; }
-
-    private User user = new User();
-    bool isViewing = true;
-    bool deleteDialogIsOpen = false;
-    string fileName;
-
-    protected override void OnInitialized()
-    {
-        user = UserService.GetSingleUser(UserId);
-    }
-
-    void SubmitForm()
-    {
-        UserService.UpdateUser(user);
-        Toaster.Add("User Updated Successfully", MatToastType.Success);
-        ToggleEditing();
-    }
-
-    void ToggleEditing()
-    {
-        isViewing = !isViewing;
-    }
-
-    void DeleteUser()
-    {
-        UserService.DeleteUser(user);
-        NavigationManager.NavigateTo("/Users", true);
-    }
-
-    void OpenDeleteDialog()
-    {
-        deleteDialogIsOpen = true;
-    }
-
-    async Task HandleFileUpload(IMatFileUploadEntry[] files)
-    {
-        fileName = files[0].Name;
-        user.ImageBase64 = await UserService.FileUploadToBase64Async(files[0]);
-    }
+    </p>
+    <p>
+        <MatButton Style="background-color:cadetblue" Raised="true" OnClick="SubmitForm"><MatIcon Style="margin-right:5px" Icon="@MatIconNames.Done" />  Submit</MatButton>
+    </p>
 
 }
+</p>
+
+    <MatDialog @bind-IsOpen="@deleteDialogIsOpen">
+        <MatDialogTitle>Are you Sure?</MatDialogTitle>
+        <MatDialogContent>
+            <p>Do you really want to delete @user.UserId</p>
+        </MatDialogContent>
+        <MatDialogActions>
+            <MatButton OnClick="@(e => { deleteDialogIsOpen = false; })" Style="margin-right:4px">Cancel</MatButton>
+            <MatButton OnClick="@DeleteUser">Delete</MatButton>
+        </MatDialogActions>
+    </MatDialog>
+
+    @code {
+        [Parameter] public string UserId { get; set; }
+
+        private User user = new User();
+        bool isViewing = true;
+        bool deleteDialogIsOpen = false;
+        string fileName;
+
+        protected override void OnInitialized()
+        {
+            user = UserService.GetSingleUser(UserId);
+        }
+
+        void SubmitForm()
+        {
+            UserService.UpdateUser(user);
+            Toaster.Add("User Updated Successfully", MatToastType.Success);
+            ToggleEditing();
+        }
+
+        void ToggleEditing()
+        {
+            isViewing = !isViewing;
+            if (isViewing)
+            {
+                user = UserService.GetSingleUser(UserId);
+            }
+        }
+
+        void DeleteUser()
+        {
+            UserService.DeleteUser(user);
+            NavigationManager.NavigateTo("/Users", true);
+        }
+
+        void OpenDeleteDialog()
+        {
+            deleteDialogIsOpen = true;
+        }
+
+        async Task HandleFileUpload(IMatFileUploadEntry[] files)
+        {
+            fileName = files[0].Name;
+            user.ImageBase64 = await UserService.FileUploadToBase64Async(files[0]);
+        }
+
+    }
