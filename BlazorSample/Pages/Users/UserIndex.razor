@@ -1,0 +1,56 @@
+﻿@page "/users"
+
+@using BlazorSample.Data
+@inject UserService UserService
+
+<MatHeadline3>User List</MatHeadline3>
+
+<MatBody1>This component demonstrates fetching data from a service.</MatBody1>
+
+@if (users == null)
+{
+    <MatBody1><em>Loading...</em></MatBody1>
+}
+else
+{
+<p>
+    <MatButton Link="/users/create" Raised="true"><MatIcon Style="margin-right:5px" Icon="@MatIconNames.Create" />  Create</MatButton>
+</p>
+
+<MatTable Items="@users" LoadInitialData="true" Striped="true" RequestApiOnlyOnce="true"  AllowSelection="true" RowClass=""
+                  ApiUrl="" FilterByColumnName="FirstName" DebounceMilliseconds="150" class="mat-elevation-z5">
+    <MatTableHeader>
+        <th style="width:15%">User ID</th>
+        <th style="width:15%">First Name</th>
+        <th style="width:15%">Last Name</th>
+        <th style="width:15%">Department</th>
+        <th style="width:15%">Phone Number</th>
+        <th style="width:0">Controls</th>
+    </MatTableHeader>
+    <MatTableRow>
+        <td style="width:15%">@context.UserId</td>
+        <td style="width:15%">@context.FirstName</td>
+        <td style="width:15%">@context.LastName</td>
+        <td style="width:15%">@context.Department</td>
+        <td style="width:15%">@context.PhoneNumber</td>
+        <td style="width:0">
+            <MatButton Style="background-color:cadetblue" Raised="true" Link="@CreateViewLink(context)"><MatIcon Style="margin-right:5px" Icon="@MatIconNames.Visibility" />Details</MatButton>
+        </td>
+    </MatTableRow>
+</MatTable>
+}
+
+@code {
+    private List<User> users;
+
+    protected override async Task OnInitializedAsync()
+    {
+        users = await UserService.GetUsersAsync();
+    }
+
+    private string CreateViewLink(User user)
+    {
+        return $"/users/view/{user.UserId}";
+    }
+
+}

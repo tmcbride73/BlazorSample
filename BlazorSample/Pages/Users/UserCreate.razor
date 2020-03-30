@@ -1,0 +1,71 @@
+﻿@page "/users/create"
+
+@using BlazorSample.Data
+@inject UserService UserService
+@inject NavigationManager NavigationManager
+
+<MatHeadline4>Create</MatHeadline4>
+
+<p>This is the create page.</p>
+
+<hr />
+<div class="d-flex justify-content-start">
+    <div class="">
+        <EditForm Model="user" OnValidSubmit="submitForm">
+            <p>
+                <MatTextField TValue="string" Label="User ID" @bind-Value="@user.UserId" Required="true"></MatTextField>
+            </p>
+            <p>
+                <MatTextField TValue="string" Label="First Name" @bind-Value="@user.FirstName" Required="true"></MatTextField>
+            </p>
+            <p>
+                <MatTextField TValue="string" Label="Last Name" @bind-Value="@user.LastName" Required="true"></MatTextField>
+            </p>
+            <p>
+                <MatTextField TValue="string" Label="Department" @bind-Value="@user.Department"></MatTextField>
+            </p>
+            <p>
+                <MatTextField TValue="string" Label="Phone Number" @bind-Value="@user.PhoneNumber"></MatTextField>
+            </p>
+        </EditForm>
+    </div>
+    <div class="ml-3">
+        @if (user.ImageBase64 != null)
+        {
+            <img src=@("data:image/jpg;base64," + @user.ImageBase64) style="object-fit: cover; width:200px; height:200px;" class="rounded mat-elevation-z2" />
+        }
+        else
+        {
+            <img src="UserPlaceholder.jpg" style="object-fit: cover; width:200px; height:200px;" class="rounded mat-elevation-z2" />
+        }
+        <MatFileUpload Style="max-width:200px; max-height:50px" Class="mt-2" OnChange="HandleFileUpload"></MatFileUpload>
+        <div class="mat-subtitle2">@fileName</div>
+
+
+
+    </div>
+</div>
+
+<hr />
+
+<p>
+    <MatButton Raised="true" Type="submit">Submit</MatButton>
+</p>
+
+
+@code {
+    private User user = new User();
+    string fileName;
+
+    private void submitForm()
+    {
+        UserService.CreateNewUser(user);
+        NavigationManager.NavigateTo("/Users", true);
+    }
+
+    async Task HandleFileUpload(IMatFileUploadEntry[] files)
+    {
+        fileName = files[0].Name;
+        user.ImageBase64 = await UserService.FileUploadToBase64Async(files[0]);
+    }
+}
