@@ -12,6 +12,7 @@ using Microsoft.Extensions.Hosting;
 using BlazorSample.Data;
 using System.Net.Http;
 using MatBlazor;
+using BlazorSample.Repositories;
 
 namespace BlazorSample
 {
@@ -38,7 +39,8 @@ namespace BlazorSample
                 config.MaximumOpacity = 95;
                 config.VisibleStateDuration = 3000;
             });
-            services.AddSingleton<UserService>();
+            services.AddScoped<UserRepository>();
+            services.AddScoped<UserService>();
             services.AddScoped<HttpClient>();
             services.AddSignalR();
         }
