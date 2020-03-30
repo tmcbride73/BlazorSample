@@ -1,5 +1,6 @@
 ﻿using MatBlazor;
 using Microsoft.AspNetCore.Http;
+using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
@@ -12,6 +13,14 @@ namespace BlazorSample.Repositories
 {
     public class UserRepository
     {
+        private ILogger<UserRepository> _logger { get; set; }
+        public UserRepository(ILogger<UserRepository> logger)
+        {
+            _logger = logger;
+
+            _logger.LogDebug(BaseUrl);
+        }
+
         public static string BaseUrl = Directory.GetParent(Directory.GetCurrentDirectory()).FullName + "/BlazorSample/";
         public string UserDataPath = BaseUrl + "UserData/MOCK_DATA.json";
         public string UserImagesPath = BaseUrl + "UserData/";

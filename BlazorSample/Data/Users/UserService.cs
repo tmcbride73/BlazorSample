@@ -11,21 +11,25 @@ namespace BlazorSample.Data
 {
     public class UserService
     {
-        [Inject]
         protected IMatToaster Toaster { get; set; }
+        protected UserRepository _userRepo { get; set; }
+        public UserService(UserRepository userRepo, IMatToaster toaster)
+        {
+            _userRepo = userRepo;
+            Toaster = toaster;
+        }
+
 
         public Task<List<User>> GetUsersAsync()
         {
-            var userRepo = new UserRepository();
-            var userList = userRepo.GetAllUsers();
+            var userList = _userRepo.GetAllUsers();
 
             return Task.FromResult(userList);
         }
 
         public User GetSingleUser(string userId)
         {
-            var userRepo = new UserRepository();
-            var user = userRepo.GetSingleUser(userId);
+            var user = _userRepo.GetSingleUser(userId);
 
             return user;
         }
@@ -33,33 +37,28 @@ namespace BlazorSample.Data
 
         public List<string> GetAllUserNames()
         {
-            var userRepo = new UserRepository();
-            var userIdList = userRepo.GetAllUserNames();
+            var userIdList = _userRepo.GetAllUserNames();
             return userIdList;
         }
 
         public void CreateNewUser(User user)
         {
-            var userRepo = new UserRepository();
-            userRepo.CreateUser(user);
+            _userRepo.CreateUser(user);
         }
 
         public void UpdateUser(User user)
         {
-            var userRepo = new UserRepository();
-            userRepo.UpdateUser(user);
+            _userRepo.UpdateUser(user);
         }
 
         public void DeleteUser (User user)
         {
-            var userRepo = new UserRepository();
-            userRepo.DeleteUser(user.UserId);
+            _userRepo.DeleteUser(user.UserId);
         }
 
         public Task<string> FileUploadToBase64Async(IMatFileUploadEntry file)
         {
-            var userRepo = new UserRepository();
-            var imageBase64 = userRepo.FileUploadToBase64Async(file);
+            var imageBase64 = _userRepo.FileUploadToBase64Async(file);
             return imageBase64;
         }
     }
