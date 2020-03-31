@@ -1,0 +1,29 @@
+﻿<img src=@FormatImageSource()
+     style="object-fit: cover; width:@StyleWidth; height:@StyleHeight;"
+     class="rounded mat-elevation-z2" />
+
+@code {
+    [Parameter]
+    public string Base64Data { get; set; }
+
+    [Parameter]
+    public string DefaultImage { get; set; }
+
+    [Parameter]
+    public string StyleWidth { get; set; }
+
+    [Parameter]
+    public string StyleHeight { get; set; }
+
+    private string FormatImageSource()
+    {
+        if (string.IsNullOrWhiteSpace(Base64Data))
+        {
+            return DefaultImage;
+        }
+        else
+        {
+            return $"data:image/jpg;base64,{Base64Data}";
+        }
+    }
+}
