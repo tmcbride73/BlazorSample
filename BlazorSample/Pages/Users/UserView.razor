@@ -17,7 +17,7 @@ else
 }
 
 <p>
-    <MatButton Style="background-color:cadetblue" Raised="true" Link="/users"><MatIcon Style="margin-right:5px" Icon="@MatIconNames.Arrow_back" />  Back to List</MatButton>
+    <MatButton Raised="true" Link="/users"><MatIcon Style="margin-right:5px" Icon="@MatIconNames.Arrow_left" />  Back to List</MatButton>
 </p>
 
 <hr />
@@ -60,17 +60,17 @@ else
 
     @if (isViewing)
     {
-        <MatButton Style="background-color:cadetblue" Raised="true" OnClick="ToggleEditing"><MatIcon Icon="@MatIconNames.Edit" />  Edit</MatButton>
+        <MatButton Raised="true" OnClick="ToggleEditing"><MatIcon Style="margin-right:5px" Icon="@MatIconNames.Edit" />  Edit</MatButton>
     }
     else
     {
 
     <p>
-        <MatButton Style="background-color:cadetblue" Raised="true" OnClick="ToggleEditing"><MatIcon Style="margin-right:5px" Icon="@MatIconNames.Cancel" />  Cancel Edit</MatButton>
+        <MatButton Raised="true" OnClick="ToggleEditing"><MatIcon Style="margin-right:5px" Icon="@MatIconNames.Cancel" />  Cancel Edit</MatButton>
         <MatButton Style="background-color:darkred" Raised="true" OnClick="OpenDeleteDialog"><MatIcon Style="margin-right:5px" Icon="@MatIconNames.Delete" />  Delete</MatButton>
     </p>
     <p>
-        <MatButton Style="background-color:cadetblue" Raised="true" OnClick="SubmitForm"><MatIcon Style="margin-right:5px" Icon="@MatIconNames.Done" />  Submit</MatButton>
+        <MatButton Raised="true" OnClick="SubmitForm"><MatIcon Style="margin-right:5px" Icon="@MatIconNames.Done" />  Submit</MatButton>
     </p>
 
 }

@@ -15,41 +15,45 @@
 <MatTabGroup @bind-ActiveIndex="@tabIndex">
     <MatTab Label="Enter User Information">
         <br />
-        <EditForm Model="user">
+        <EnterKeyEventArea OnEnterPressed="NextTab">
+            <EditForm Model="user">
+                <p>
+                    <MatTextField TValue="string" Label="User ID" @bind-Value="@user.UserId" Required="true"></MatTextField>
+                </p>
+                <p>
+                    <MatTextField TValue="string" Label="First Name" @bind-Value="@user.FirstName" Required="true"></MatTextField>
+                </p>
+                <p>
+                    <MatTextField TValue="string" Label="Last Name" @bind-Value="@user.LastName" Required="true"></MatTextField>
+                </p>
+                <p>
+                    <MatTextField TValue="string" Label="Department" @bind-Value="@user.Department"></MatTextField>
+                </p>
+                <p>
+                    <MatTextField TValue="string" Label="Phone Number" @bind-Value="@user.PhoneNumber"></MatTextField>
+                </p>
+            </EditForm>
+            <hr />
             <p>
-                <MatTextField TValue="string" Label="User ID" @bind-Value="@user.UserId" Required="true"></MatTextField>
+                <MatButton Raised="true" OnClick="NextTab"><MatIcon Style="margin-right:5px" Icon="@MatIconNames.Arrow_right" /> Next Page</MatButton>
             </p>
-            <p>
-                <MatTextField TValue="string" Label="First Name" @bind-Value="@user.FirstName" Required="true"></MatTextField>
-            </p>
-            <p>
-                <MatTextField TValue="string" Label="Last Name" @bind-Value="@user.LastName" Required="true"></MatTextField>
-            </p>
-            <p>
-                <MatTextField TValue="string" Label="Department" @bind-Value="@user.Department"></MatTextField>
-            </p>
-            <p>
-                <MatTextField TValue="string" Label="Phone Number" @bind-Value="@user.PhoneNumber"></MatTextField>
-            </p>
-        </EditForm>
-        <hr />
-        <p>
-            <MatButton Raised="true" OnClick="@NextTab">Next Page</MatButton>
-        </p>
+        </EnterKeyEventArea>
     </MatTab>
     <MatTab Label="Select a User Image">
         <br />
-        <p>
-            <Image Base64Data="@user.ImageBase64"
-                   DefaultImage="UserPlaceholder.jpg"
-                   StyleHeight="200px"
-                   StyleWidth="200px" />
-            <FileUploader @bind-FileBase64="@user.ImageBase64"></FileUploader>
-        </p>
+        <EnterKeyEventArea OnEnterPressed="SubmitForm">
+            <p>
+                <Image Base64Data="@user.ImageBase64"
+                       DefaultImage="UserPlaceholder.jpg"
+                       StyleHeight="200px"
+                       StyleWidth="200px" />
+                <FileUploader @bind-FileBase64="@user.ImageBase64"></FileUploader>
+            </p>
+        </EnterKeyEventArea>
         <hr />
         <p>
-            <MatButton Raised="true" OnClick="@PreviousTab">Previous Page</MatButton>
-            <MatButton Style="background-color:cadetblue" Raised="true" OnClick="SubmitForm"><MatIcon Style="margin-right:5px" Icon="@MatIconNames.Done" />  Submit</MatButton>
+            <MatButton Raised="true" OnClick="PreviousTab"><MatIcon Style="margin-right:5px" Icon="@MatIconNames.Arrow_left" /> Previous Page</MatButton>
+            <MatButton Raised="true" OnClick="SubmitForm"><MatIcon Style="margin-right:5px" Icon="@MatIconNames.Done" />  Submit</MatButton>
         </p>
     </MatTab>
 </MatTabGroup>
@@ -71,11 +75,11 @@
         user.ImageBase64 = await UserService.FileUploadToBase64Async(files[0]);
     }
 
-    void NextTab(MouseEventArgs e)
+    private void NextTab()
     {
         tabIndex = tabIndex + 1;
     }
-    void PreviousTab(MouseEventArgs e)
+    private void PreviousTab()
     {
         tabIndex = tabIndex - 1;
     }

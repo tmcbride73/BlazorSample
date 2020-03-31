@@ -1,11 +1,31 @@
-﻿
-<Router AppAssembly="@typeof(Program).Assembly">
-    <Found Context="routeData">
-        <RouteView RouteData="@routeData" DefaultLayout="@typeof(MainLayout)" />
-    </Found>
-    <NotFound>
-        <LayoutView Layout="@typeof(MainLayout)">
-            <p>Sorry, there's nothing at this address.</p>
-        </LayoutView>
-    </NotFound>
-</Router>
+﻿<MatThemeProvider Theme="@theme">
+    <Router AppAssembly="@typeof(Program).Assembly">
+        <Found Context="routeData">
+            <RouteView RouteData="@routeData" DefaultLayout="@typeof(MainLayout)" />
+        </Found>
+        <NotFound>
+            <LayoutView Layout="@typeof(MainLayout)">
+                <p>Sorry, there's nothing at this address.</p>
+            </LayoutView>
+        </NotFound>
+    </Router>
+</MatThemeProvider>
+
+@* Label Color and Navbar Color *@
+<style>
+    .mdc-text-field--focused:not(.mdc-text-field--disabled) .mdc-floating-label {
+        color: @(theme.Primary);
+    }
+    .sidebar {
+        background-image: linear-gradient(180deg, @(theme.Primary) 0%, @(theme.Secondary) 70%);
+    }
+</style>
+
+@code
+    {
+    MatTheme theme = new MatTheme()
+    {
+        Primary = MatThemeColors.LightBlue._500.Value,
+        Secondary = MatThemeColors.BlueGrey._500.Value
+    };
+}

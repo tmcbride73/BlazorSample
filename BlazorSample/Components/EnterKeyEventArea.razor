@@ -1,0 +1,17 @@
+﻿<div @onkeyup="CheckEnterKey">
+    @ChildContent
+</div>
+
+@code {
+    [Parameter]
+    public RenderFragment ChildContent { get; set; }
+    [Parameter]
+    public EventCallback<object> OnEnterPressed { get; set; }
+    public void CheckEnterKey(KeyboardEventArgs args)
+    {
+        if (args.Key == "Enter")
+        {
+            OnEnterPressed.InvokeAsync(null);
+        }
+    }
+}
