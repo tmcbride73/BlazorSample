@@ -30,6 +30,8 @@ namespace BlazorSample
         {
             services.AddRazorPages();
             services.AddServerSideBlazor();
+            //For Debugging
+            //services.AddServerSideBlazor().AddCircuitOptions(options => { options.DetailedErrors = true; });
             services.AddMatToaster(config =>
             {
                 config.Position = MatToastPosition.BottomLeft;

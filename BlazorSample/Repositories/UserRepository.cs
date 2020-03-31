@@ -21,7 +21,7 @@ namespace BlazorSample.Repositories
             _logger.LogDebug(BaseUrl);
         }
 
-        public static string BaseUrl = Directory.GetParent(Directory.GetCurrentDirectory()).FullName + "/BlazorSample/";
+        public static string BaseUrl = Directory.GetParent(Directory.GetCurrentDirectory()).FullName + "/wwwroot/";
         public string UserDataPath = BaseUrl + "UserData/MOCK_DATA.json";
         public string UserImagesPath = BaseUrl + "UserData/";
 
