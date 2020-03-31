@@ -49,8 +49,7 @@ else
         { }
         else
         {
-            <MatFileUpload Style="max-width:200px; max-height:50px" Class="mt-2" OnChange="HandleFileUpload"></MatFileUpload>
-            <div class="mat-subtitle2">@fileName</div>
+            <FileUploader @bind-FileBase64="@user.ImageBase64"></FileUploader>
         }
     </div>
 </div>

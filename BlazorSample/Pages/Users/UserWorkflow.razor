@@ -1,4 +1,4 @@
-﻿@page "/users/create"
+﻿@page "/users/workflow"
 
 @using BlazorSample.Data
 @using BlazorSample.Components
@@ -6,13 +6,15 @@
 @inject UserService UserService
 @inject NavigationManager NavigationManager
 
-<MatHeadline4>Create</MatHeadline4>
+<MatHeadline4>Workflow Example</MatHeadline4>
 
 <p>Create a new user.</p>
 
 <hr />
-<div class="d-flex justify-content-start">
-    <div class="">
+
+<MatTabGroup @bind-ActiveIndex="@tabIndex">
+    <MatTab Label="Enter User Information">
+        <br />
         <EditForm Model="user">
             <p>
                 <MatTextField TValue="string" Label="User ID" @bind-Value="@user.UserId" Required="true"></MatTextField>
@@ -30,26 +32,32 @@
                 <MatTextField TValue="string" Label="Phone Number" @bind-Value="@user.PhoneNumber"></MatTextField>
             </p>
         </EditForm>
-    </div>
-    <div class="ml-3">
-        <Image Base64Data="@user.ImageBase64"
-               DefaultImage="UserPlaceholder.jpg"
-               StyleHeight="200px"
-               StyleWidth="200px" />
-        <FileUploader @bind-FileBase64="@user.ImageBase64"></FileUploader>
-    </div>
-</div>
-
-<hr />
-
-<p>
-    <MatButton Style="background-color:cadetblue" Raised="true" OnClick="SubmitForm"><MatIcon Style="margin-right:5px" Icon="@MatIconNames.Done" />  Submit</MatButton>
-</p>
-
+        <hr />
+        <p>
+            <MatButton Raised="true" OnClick="@NextTab">Next Page</MatButton>
+        </p>
+    </MatTab>
+    <MatTab Label="Select a User Image">
+        <br />
+        <p>
+            <Image Base64Data="@user.ImageBase64"
+                   DefaultImage="UserPlaceholder.jpg"
+                   StyleHeight="200px"
+                   StyleWidth="200px" />
+            <FileUploader @bind-FileBase64="@user.ImageBase64"></FileUploader>
+        </p>
+        <hr />
+        <p>
+            <MatButton Raised="true" OnClick="@PreviousTab">Previous Page</MatButton>
+            <MatButton Style="background-color:cadetblue" Raised="true" OnClick="SubmitForm"><MatIcon Style="margin-right:5px" Icon="@MatIconNames.Done" />  Submit</MatButton>
+        </p>
+    </MatTab>
+</MatTabGroup>
 
 @code {
     private User user = new User();
     string fileName;
+    public int tabIndex = 0;
 
     private void SubmitForm()
     {
@@ -61,5 +69,14 @@
     {
         fileName = files[0].Name;
         user.ImageBase64 = await UserService.FileUploadToBase64Async(files[0]);
+    }
+
+    void NextTab(MouseEventArgs e)
+    {
+        tabIndex = tabIndex + 1;
+    }
+    void PreviousTab(MouseEventArgs e)
+    {
+        tabIndex = tabIndex - 1;
     }
 }

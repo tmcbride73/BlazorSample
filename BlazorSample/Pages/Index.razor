@@ -1,37 +1,5 @@
 ﻿@page "/"
 
-<MatHeadline2>Blazor User Management Sample</MatHeadline2>
+<MatHeadline2>User Management</MatHeadline2>
 
-<MatButton OnClick="ButtonClick">Open</MatButton>
-
-<MatSnackbar @bind-IsOpen="@snackBarIsOpen" Stacked="true">
-    <MatSnackbarContent>You have clicked my new button. How about clicking another>?</MatSnackbarContent>
-    <MatSnackbarActions>
-        <MatButton OnClick="ButtonClick2" Raised="true">Another</MatButton>
-    </MatSnackbarActions>
-</MatSnackbar>
-
-<MatSnackbar @bind-IsOpen="@snackBarIsOpen2" Leading="true">
-    <MatSnackbarContent>Nice.</MatSnackbarContent>
-    <MatSnackbarActions>
-        <MatButton Raised="true">Undo</MatButton>
-    </MatSnackbarActions>
-</MatSnackbar>
-
-@code{
-    bool snackBarIsOpen = false;
-    bool snackBarIsOpen2 = false;
-
-    void ButtonClick()
-    {
-        snackBarIsOpen = true;
-        this.StateHasChanged();
-    }
-
-    void ButtonClick2()
-    {
-        snackBarIsOpen2 = true;
-        this.StateHasChanged();
-    }
-
-}
+<MatSubtitle2>This website was built using Blazor</MatSubtitle2>
