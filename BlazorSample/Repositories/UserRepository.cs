@@ -13,24 +13,22 @@ namespace BlazorSample.Repositories
 {
     public class UserRepository
     {
-        private ILogger<UserRepository> _logger { get; set; }
-        public UserRepository(ILogger<UserRepository> logger)
+        public UserRepository(string jsonLocation)
         {
-            _logger = logger;
-
-            _logger.LogDebug(BaseUrl);
+            BaseUrl = jsonLocation;
+            UserDataPath = BaseUrl + "UserData/MOCK_DATA.json";
+            UserImagesPath = BaseUrl + "UserData/";
         }
 
-        public static string BaseUrl = Directory.GetParent(Directory.GetCurrentDirectory()).FullName + "/wwwroot/";
-        public string UserDataPath = BaseUrl + "UserData/MOCK_DATA.json";
-        public string UserImagesPath = BaseUrl + "UserData/";
+        public string BaseUrl { get; set; }
+        public string UserDataPath { get; set; }
+        public string UserImagesPath { get; set; }
 
         public List<User> GetAllUsers()
         {
             var json = File.ReadAllText(UserDataPath);
             var userList = JsonConvert.DeserializeObject<IEnumerable<User>>(json).ToList();
             return userList;
-
         }
 
         public List<string> GetAllUserNames()
