@@ -1,17 +1,19 @@
 ﻿@page "/users/create"
 
 @using BlazorSample.Data
+@using BlazorSample.Components
+
 @inject UserService UserService
 @inject NavigationManager NavigationManager
 
 <MatHeadline4>Create</MatHeadline4>
 
-<p>Crtate a new user.</p>
+<p>Create a new user.</p>
 
 <hr />
 <div class="d-flex justify-content-start">
     <div class="">
-        <EditForm Model="user" OnValidSubmit="submitForm">
+        <EditForm Model="user">
             <p>
                 <MatTextField TValue="string" Label="User ID" @bind-Value="@user.UserId" Required="true"></MatTextField>
             </p>
@@ -30,26 +32,19 @@
         </EditForm>
     </div>
     <div class="ml-3">
-        @if (user.ImageBase64 != null)
-        {
-            <img src=@("data:image/jpg;base64," + @user.ImageBase64) style="object-fit: cover; width:200px; height:200px;" class="rounded mat-elevation-z2" />
-        }
-        else
-        {
-            <img src="UserPlaceholder.jpg" style="object-fit: cover; width:200px; height:200px;" class="rounded mat-elevation-z2" />
-        }
+        <Image Base64Data="@user.ImageBase64"
+               DefaultImage="UserPlaceholder.jpg"
+               StyleHeight="200px"
+               StyleWidth="200px" />
         <MatFileUpload Style="max-width:200px; max-height:50px" Class="mt-2" OnChange="HandleFileUpload"></MatFileUpload>
         <div class="mat-subtitle2">@fileName</div>
-
-
-
     </div>
 </div>
 
 <hr />
 
 <p>
-    <MatButton Raised="true" Type="submit">Submit</MatButton>
+    <MatButton Style="background-color:cadetblue" Raised="true" OnClick="SubmitForm"><MatIcon Style="margin-right:5px" Icon="@MatIconNames.Done" />  Submit</MatButton>
 </p>
 
 
@@ -57,7 +52,7 @@
     private User user = new User();
     string fileName;
 
-    private void submitForm()
+    private void SubmitForm()
     {
         UserService.CreateNewUser(user);
         NavigationManager.NavigateTo("/Users", true);
