@@ -1,6 +1,8 @@
 ﻿@page "/users/view/{UserId}"
 
 @using BlazorSample.Data
+@using BlazorSample.Components
+
 @inject UserService UserService
 @inject NavigationManager NavigationManager
 @inject IMatToaster Toaster
@@ -38,14 +40,11 @@ else
         </EditForm>
     </div>
     <div class="ml-3">
-        @if (user.ImageBase64 != null)
-        {
-            <img src=@("data:image/jpg;base64," + @user.ImageBase64) style="object-fit: cover; width:200px; height:200px;" class="rounded mat-elevation-z2" />
-        }
-        else
-        {
-            <img src="UserPlaceholder.jpg" style="object-fit: cover; width:200px; height:200px;" class="rounded mat-elevation-z2" />
-        }
+        <Image Base64Data="@user.ImageBase64" 
+               DefaultImage="UserPlaceholder.jpg" 
+               StyleHeight="200px" 
+               StyleWidth="200px" />
+
         @if (isViewing)
         { }
         else
