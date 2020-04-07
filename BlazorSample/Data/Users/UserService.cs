@@ -27,6 +27,12 @@ namespace BlazorSample.Data
             return Task.FromResult(userList);
         }
 
+        public List<User> GetAllUsers()
+        {
+            var userList = _userRepo.GetAllUsers();
+            return userList;
+        }
+
         public User GetSingleUser(string userId)
         {
             var user = _userRepo.GetSingleUser(userId);

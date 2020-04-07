@@ -37,6 +37,9 @@ else
             <p>
                 <MatTextField TValue="string" Label="Phone Number" @bind-Value="@user.PhoneNumber" ReadOnly="@isViewing"></MatTextField>
             </p>
+            <p>
+                <MatDatePicker Style="width:215px" Label="Start Date" @bind-Value="@user.StartDate" Format="MMMM dd, yyyy" ReadOnly="@isViewing"></MatDatePicker>
+            </p>
         </EditForm>
     </div>
     <div class="ml-3">
@@ -103,7 +106,7 @@ else
         void SubmitForm()
         {
             UserService.UpdateUser(user);
-            Toaster.Add("User Updated Successfully", MatToastType.Success);
+            Toaster.Add($"User {user.UserId} Updated Successfully", MatToastType.Success);
             ToggleEditing();
         }
 
@@ -119,7 +122,8 @@ else
         void DeleteUser()
         {
             UserService.DeleteUser(user);
-            NavigationManager.NavigateTo("/Users", true);
+            Toaster.Add($"User {user.UserId} Deleted Successfully", MatToastType.Danger);
+            NavigationManager.NavigateTo("/Users", false);
         }
 
         void OpenDeleteDialog()

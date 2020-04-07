@@ -5,6 +5,7 @@
 
 @inject UserService UserService
 @inject NavigationManager NavigationManager
+@inject IMatToaster Toaster
 
 <MatHeadline4>Create</MatHeadline4>
 
@@ -28,6 +29,9 @@
             </p>
             <p>
                 <MatTextField TValue="string" Label="Phone Number" @bind-Value="@user.PhoneNumber"></MatTextField>
+            </p>
+            <p>
+                <MatDatePicker Style="width:215px" Label="Start Date" @bind-Value="@user.StartDate" Format="MMMM dd, yyyy"></MatDatePicker>
             </p>
         </EditForm>
     </div>
@@ -54,7 +58,8 @@
     private void SubmitForm()
     {
         UserService.CreateNewUser(user);
-        NavigationManager.NavigateTo("/Users", true);
+        Toaster.Add($"User {user.UserId} Created Successfully", MatToastType.Success);
+        NavigationManager.NavigateTo("/Users", false);
     }
 
     async Task HandleFileUpload(IMatFileUploadEntry[] files)

@@ -14,22 +14,32 @@
 else
 {
 
-<MatTable SearchTermFieldLabel="Search By First Name" SearchTermFieldPlaceHolder="First Name" PageSize="12" Items="@users" LoadInitialData="true" Striped="true" RequestApiOnlyOnce="true" AllowSelection="true" RowClass=""
-          ApiUrl="" FilterByColumnName="FirstName" DebounceMilliseconds="150" class="mat-elevation-z2 w-100">
+    <MatTableFilter @bind-Users="@users"></MatTableFilter>
+
+<MatTable PageSize="12" Items="@users" LoadInitialData="true" Striped="true"
+          RequestApiOnlyOnce="true" AllowSelection="true" RowClass=""
+          ApiUrl="" DebounceMilliseconds="150" class=" w-100">
     <MatTableHeader>
         <th>User ID</th>
         <th>First Name</th>
         <th>Last Name</th>
         <th>Department</th>
         <th>Phone Number</th>
+        <th>Start Date</th>
         <th>Controls</th>
     </MatTableHeader>
     <MatTableRow>
-        <td style="width:20%">@context.UserId</td>
-        <td style="width:20%">@context.FirstName</td>
-        <td style="width:20%">@context.LastName</td>
-        <td style="width:20%">@context.Department</td>
-        <td style="width:20%">@context.PhoneNumber</td>
+        <td style="width:15%">@context.UserId</td>
+        <td style="width:15%">@context.FirstName</td>
+        <td style="width:15%">@context.LastName</td>
+        <td style="width:15%">@context.Department</td>
+        <td style="width:15%">@context.PhoneNumber</td>
+        <td style="width:18%">
+            @if (context.StartDate.HasValue)
+                {
+                <text>@context.StartDate.Value.ToShortDateString() </text>
+                }
+        </td>
         <td style="width:unset">
                 <MatButton Raised="true" Link="@CreateViewLink(context)"><MatIcon Style="margin-right:5px" Icon="@MatIconNames.Visibility" />Details</MatButton>
         </td>
@@ -39,6 +49,7 @@ else
 
 @code {
     private List<User> users;
+    private string filterSelection;
 
     protected override async Task OnInitializedAsync()
     {
@@ -48,6 +59,12 @@ else
     private string CreateViewLink(User user)
     {
         return $"/users/view/{user.UserId}";
+    }
+
+    void ClearAll(){
+        var test = users[0];
+        users.Clear();
+        users.Add(test);
     }
 
 }
