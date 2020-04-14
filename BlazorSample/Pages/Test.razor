@@ -1,0 +1,28 @@
+﻿@page "/Test"
+
+@using BlazorSample.Data
+@inject IJSRuntime JSRuntime
+
+<h3>Test</h3>
+<hr />
+
+<p>
+    <MatHeadline6>Test JS Alert</MatHeadline6>
+</p>
+<p>
+    <MatTextField @bind-Value="@alertMessage"></MatTextField>
+</p>
+<p>
+    <MatButton @onclick="ShowAlert" Raised="true">Show Alert</MatButton>
+</p>
+
+@code {
+
+    private string alertMessage;
+
+    async Task ShowAlert()
+    {
+        await JSRuntime.InvokeVoidAsync("ShowAlert", alertMessage);
+    }
+
+}

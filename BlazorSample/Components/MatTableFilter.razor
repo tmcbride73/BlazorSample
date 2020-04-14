@@ -1,52 +1,69 @@
-﻿@using BlazorSample.Data
-
-@inject UserService UserService
+﻿@using System.Linq 
+@typeparam TValue
 
 <p>
-    <EnterKeyEventArea OnEnterPressed="filterUsers">
-        <MatTextField TValue="string" Label="User ID" Icon="filter_list" @bind-Value="@userIdFilter"></MatTextField>
-        <MatTextField TValue="string" Label="First Name" Icon="filter_list" @bind-Value="@firstNameFilter"></MatTextField>
-        <MatTextField TValue="string" Label="Last Name" Icon="filter_list" @bind-Value="@lastNameFilter"></MatTextField>
-        <MatTextField TValue="string" Label="Department" Icon="filter_list" @bind-Value="@departmentFilter"></MatTextField>
-        <MatTextField TValue="string" Label="Phone Number" Icon="filter_list" @bind-Value="@phoneNumberFilter"></MatTextField>
-    </EnterKeyEventArea>
+    <CascadingValue TValue="List<ColFilter>" Value="@FilterList">
+        @ChildContent
+    </CascadingValue>
 </p>
 
 <p>
-    <MatButton @onclick="filterUsers" Raised="true">Search with Filters</MatButton>
+    <MatButton Raised="true" OnClick="@FilterUsers">Search with Filters</MatButton>
 </p>
 
 @code {
 
     [Parameter]
-    public List<User> Users { get; set; }
+    public List<TValue> Items { get; set; }
 
-    public string userIdFilter { get; set; } = "";
-    public string firstNameFilter { get; set; } = "";
-    public string lastNameFilter { get; set; } = "";
-    public string departmentFilter { get; set; } = "";
-    public string phoneNumberFilter { get; set; } = "";
+    public List<TValue> InitialItems = new List<TValue>();
 
     [Parameter]
-    public EventCallback<List<User>> UsersChanged { get; set; }
+    public RenderFragment ChildContent { get; set; }
 
-    private async Task filterUsers()
+    public List<ColFilter> FilterList = new List<ColFilter>();
+
+    [Parameter]
+    public EventCallback<List<ColFilter>> FilterListChanged { get; set; }
+
+    [Parameter]
+    public EventCallback<List<TValue>> ItemsChanged { get; set; }
+
+    protected override void OnInitialized()
     {
-        Users = UserService.GetAllUsers();
-        
-        if(userIdFilter == null && firstNameFilter == null && lastNameFilter == null && departmentFilter == null && phoneNumberFilter == null){
-            
-        }else{
-            Users = (from user in Users
-                 where (user.UserId.ToUpper().Contains(userIdFilter.ToUpper()) || userIdFilter == "")
-                 && (user.FirstName.ToUpper().Contains(firstNameFilter.ToUpper()) || firstNameFilter == "")
-                 && (user.LastName.ToUpper().Contains(lastNameFilter.ToUpper()) || lastNameFilter == "")
-                 && (user.Department.ToUpper().Contains(departmentFilter.ToUpper()) || departmentFilter == "")
-                 && (user.PhoneNumber.ToUpper().Contains(phoneNumberFilter.ToUpper()) || phoneNumberFilter == "")
-                 select user).ToList();
+        InitialItems.AddRange(Items);
+    }
+
+    private async Task OnFilterListChanged()
+    {
+        await FilterUsers();
+    }
+
+    private async Task FilterUsers()
+    {
+        bool isFilterEmpty = true;
+        List<TValue> testItems = new List<TValue>();
+        testItems.AddRange(InitialItems);
+        Items.Clear();
+
+        foreach (var filter in FilterList)
+        {
+            if (filter.Value != null && filter.Value != "")
+            {
+                isFilterEmpty = false;
+                Items.AddRange(from item in testItems
+                               where item.GetType().GetProperty(filter.Name).GetValue(item).ToString().ToUpper().Contains(filter.Value.ToUpper())
+                               select item);
+            }
         }
 
+        Items = Items.Distinct().ToList();
 
-        await UsersChanged.InvokeAsync(Users);
+        if (isFilterEmpty)
+        {
+            Items.AddRange(InitialItems);
+        }
+
+        await ItemsChanged.InvokeAsync(Items);
     }
 }
