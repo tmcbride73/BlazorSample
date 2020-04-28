@@ -1,15 +1,10 @@
-﻿using MatBlazor;
-using Microsoft.AspNetCore.Http;
-using Microsoft.Extensions.Logging;
+﻿using BlazorSample.Domain;
 using Newtonsoft.Json;
-using System;
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.IO;
 using System.Linq;
-using System.Threading.Tasks;
 
-namespace BlazorSample.Repositories
+namespace BlazorSample.Infrastructure
 {
     public class UserRepository
     {
@@ -96,28 +91,5 @@ namespace BlazorSample.Repositories
             var json = JsonConvert.SerializeObject(userList);
             File.WriteAllText(UserDataPath, json);
         }
-
-        public async Task UploadUserImageAsync(IMatFileUploadEntry file, User user)
-        {
-            using (var stream = new MemoryStream())
-            {
-                await file.WriteToStreamAsync(stream);
-                user.ImageBase64 = Convert.ToBase64String(stream.ToArray());
-            }
-            UpdateUser(user);
-        }
-
-        public async Task<string> FileUploadToBase64Async(IMatFileUploadEntry file)
-        {
-            string imageBase64;
-            using (var stream = new MemoryStream())
-            {
-
-                await file.WriteToStreamAsync(stream);
-                imageBase64 = Convert.ToBase64String(stream.ToArray());
-            }
-            return imageBase64;
-        }
-
     }
 }

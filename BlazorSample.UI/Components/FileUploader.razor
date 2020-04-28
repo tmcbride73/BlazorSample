@@ -1,7 +1,4 @@
-﻿@using BlazorSample.Data
-
-@inject UserService UserService
-
+﻿
 <MatFileUpload Style="@Style" Class="mt-2 rounded" OnChange="HandleFileUpload"></MatFileUpload>
 <div class="mat-subtitle2">@FileName</div>
 
@@ -21,7 +18,8 @@
     async Task HandleFileUpload(IMatFileUploadEntry[] files)
     {
         FileName = files[0].Name;
-        FileBase64 = await UserService.FileUploadToBase64Async(files[0]);
+        FileBase64 = await files[0].ToBase64();
+
         await FileBase64Changed.InvokeAsync(FileBase64);
     }
 }

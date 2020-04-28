@@ -1,6 +1,8 @@
 ﻿@page "/users"
 
-@using BlazorSample.Data
+@using BlazorSample.Domain
+@using BlazorSample.Application
+
 @inject UserService UserService
 
 <MatHeadline3>User List</MatHeadline3>
@@ -14,13 +16,13 @@
 else
 {
 
-<MatTableFilter TValue="User" @bind-Items="@users" >
-    <MatTableFilterItem TValue="string" ForColumn="UserId" Label="User ID"></MatTableFilterItem>
-    <MatTableFilterItem TValue="string" ForColumn="FirstName" Label="First Name"></MatTableFilterItem>
-    <MatTableFilterItem TValue="string" ForColumn="LastName" Label="Last Name"></MatTableFilterItem>
-    <MatTableFilterItem TValue="string" ForColumn="Department" Label="Department"></MatTableFilterItem>
-    <MatTableFilterItem TValue="string" ForColumn="PhoneNumber" Label="Phone Number"></MatTableFilterItem>
-</MatTableFilter>
+    <MatTableFilter TValue="User" @bind-Items="@users">
+        <MatTableFilterItem TValue="string" ForColumn="UserId" Label="User ID"></MatTableFilterItem>
+        <MatTableFilterItem TValue="string" ForColumn="FirstName" Label="First Name"></MatTableFilterItem>
+        <MatTableFilterItem TValue="string" ForColumn="LastName" Label="Last Name"></MatTableFilterItem>
+        <MatTableFilterItem TValue="string" ForColumn="Department" Label="Department"></MatTableFilterItem>
+        <MatTableFilterItem TValue="string" ForColumn="PhoneNumber" Label="Phone Number"></MatTableFilterItem>
+    </MatTableFilter>
 
     <MatTable PageSize="12" Items="@users" LoadInitialData="true" Striped="true"
               RequestApiOnlyOnce="true" AllowSelection="true" RowClass=""
@@ -45,6 +47,8 @@ else
                     {
                     <text>@context.StartDate.Value.ToShortDateString() </text>
                     }
+                /**/
+                /**/
             </td>
             <td style="width:unset">
                 <MatButton Raised="true" Link="@CreateViewLink(context)"><MatIcon Style="margin-right:5px" Icon="@MatIconNames.Visibility" />Details</MatButton>

@@ -1,7 +1,8 @@
 ﻿@page "/users/create"
 
-@using BlazorSample.Data
-@using BlazorSample.Components
+@using BlazorSample.Domain
+@using BlazorSample.Application
+@using BlazorSample.UI.Components
 
 @inject UserService UserService
 @inject NavigationManager NavigationManager
@@ -60,11 +61,5 @@
         UserService.CreateNewUser(user);
         Toaster.Add($"User {user.UserId} Created Successfully", MatToastType.Success);
         NavigationManager.NavigateTo("/Users", false);
-    }
-
-    async Task HandleFileUpload(IMatFileUploadEntry[] files)
-    {
-        fileName = files[0].Name;
-        user.ImageBase64 = await UserService.FileUploadToBase64Async(files[0]);
     }
 }

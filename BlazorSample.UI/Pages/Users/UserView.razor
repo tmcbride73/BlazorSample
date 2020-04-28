@@ -1,7 +1,7 @@
 ﻿@page "/users/view/{UserId}"
 
-@using BlazorSample.Data
-@using BlazorSample.Components
+@using BlazorSample.Domain
+@using BlazorSample.Application
 
 @inject UserService UserService
 @inject NavigationManager NavigationManager
@@ -43,9 +43,9 @@ else
         </EditForm>
     </div>
     <div class="ml-3">
-        <Image Base64Data="@user.ImageBase64" 
-               DefaultImage="UserPlaceholder.jpg" 
-               StyleHeight="200px" 
+        <Image Base64Data="@user.ImageBase64"
+               DefaultImage="UserPlaceholder.jpg"
+               StyleHeight="200px"
                StyleWidth="200px" />
 
         @if (isViewing)
@@ -77,7 +77,7 @@ else
     </p>
 
 }
-</p>
+    </p>
 
     <MatDialog @bind-IsOpen="@deleteDialogIsOpen">
         <MatDialogTitle>Are you Sure?</MatDialogTitle>
@@ -130,11 +130,4 @@ else
         {
             deleteDialogIsOpen = true;
         }
-
-        async Task HandleFileUpload(IMatFileUploadEntry[] files)
-        {
-            fileName = files[0].Name;
-            user.ImageBase64 = await UserService.FileUploadToBase64Async(files[0]);
-        }
-
     }

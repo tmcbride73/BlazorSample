@@ -1,10 +1,8 @@
-﻿using MatBlazor;
-using System;
-using System.IO;
+﻿using System;
 
-namespace BlazorSample
+namespace BlazorSample.Domain
 {
-    public class User
+    public class UserFilter
     {
         public string UserId { get; set; }
         public string FirstName { get; set; }

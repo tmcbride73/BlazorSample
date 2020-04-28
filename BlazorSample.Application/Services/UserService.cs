@@ -1,24 +1,17 @@
-﻿using BlazorSample.Repositories;
-using MatBlazor;
-using Microsoft.AspNetCore.Components;
-using System;
+﻿using BlazorSample.Infrastructure;
 using System.Collections.Generic;
-using System.IO;
-using System.Linq;
 using System.Threading.Tasks;
+using BlazorSample.Domain;
 
-namespace BlazorSample.Data
+namespace BlazorSample.Application
 {
     public class UserService
     {
-        protected IMatToaster Toaster { get; set; }
         protected UserRepository _userRepo { get; set; }
-        public UserService(UserRepository userRepo, IMatToaster toaster)
+        public UserService(UserRepository userRepo)
         {
             _userRepo = userRepo;
-            Toaster = toaster;
         }
-
 
         public Task<List<User>> GetUsersAsync()
         {
@@ -60,12 +53,6 @@ namespace BlazorSample.Data
         public void DeleteUser (User user)
         {
             _userRepo.DeleteUser(user.UserId);
-        }
-
-        public Task<string> FileUploadToBase64Async(IMatFileUploadEntry file)
-        {
-            var imageBase64 = _userRepo.FileUploadToBase64Async(file);
-            return imageBase64;
         }
     }
 }

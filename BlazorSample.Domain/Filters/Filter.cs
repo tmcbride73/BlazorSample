@@ -1,5 +1,5 @@
 ﻿
-namespace BlazorSample
+namespace BlazorSample.Domain
 {
     public class ColFilter
     {
