@@ -28,6 +28,7 @@ else
               RequestApiOnlyOnce="true" AllowSelection="true" RowClass=""
               ApiUrl="" DebounceMilliseconds="150" class=" w-100">
         <MatTableHeader>
+            <th>Badge</th>
             <th>User ID</th>
             <th>First Name</th>
             <th>Last Name</th>
@@ -37,6 +38,7 @@ else
             <th>Controls</th>
         </MatTableHeader>
         <MatTableRow>
+            <td style="width:15%"><UserBadge BackgroundColor="rgba(53, 54, 58, 0.8)" TextColor="White" ShowDepartment="true" UserId="@context.UserId"></UserBadge></td>
             <td style="width:15%">@context.UserId</td>
             <td style="width:15%">@context.FirstName</td>
             <td style="width:15%">@context.LastName</td>
@@ -47,6 +49,7 @@ else
                     {
                     <text>@context.StartDate.Value.ToShortDateString() </text>
                     }
+                /**/
                 /**/
                 /**/
             </td>

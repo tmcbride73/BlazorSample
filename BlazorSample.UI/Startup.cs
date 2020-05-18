@@ -44,7 +44,7 @@ namespace BlazorSample
 
             if (Environment.IsDevelopment())
             {
-                mockDataLocation += "/BlazorSample/wwwroot/";
+                mockDataLocation += "/BlazorSample.UI/wwwroot/";
             }
             else
             {

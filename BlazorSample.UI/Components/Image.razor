@@ -1,6 +1,6 @@
 ﻿<img src=@FormatImageSource()
-     style="object-fit: cover; width:@StyleWidth; height:@StyleHeight;"
-     class="rounded mat-elevation-z2" />
+     style="object-fit: cover; width:@StyleWidth; height:@StyleHeight; @shapeCss"
+     class="mat-elevation-z2" />
 
 @code {
     [Parameter]
@@ -14,6 +14,19 @@
 
     [Parameter]
     public string StyleHeight { get; set; }
+
+    [Parameter]
+    public string Shape { get; set; }
+
+    private string shapeCss = "";
+
+    protected override void OnInitialized()
+    {
+        if(Shape == "circle")
+        {
+            shapeCss = "border-radius: 50%;";
+        }
+    }
 
     private string FormatImageSource()
     {
