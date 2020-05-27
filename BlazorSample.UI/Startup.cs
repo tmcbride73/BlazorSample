@@ -48,7 +48,7 @@ namespace BlazorSample
             }
             else
             {
-                mockDataLocation += "/wwwroot/";
+                mockDataLocation += "/wwwroot/wwwroot/";
             }
 
             services.AddScoped<UserRepository>(_ => {
@@ -68,7 +68,8 @@ namespace BlazorSample
             }
             else
             {
-                app.UseExceptionHandler("/Error");
+                app.UseDeveloperExceptionPage();
+                //app.UseExceptionHandler("/Error");
                 app.UseHsts();
             }
 
