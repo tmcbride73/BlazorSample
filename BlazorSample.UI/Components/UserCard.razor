@@ -1,0 +1,79 @@
+﻿@using BlazorSample.Application
+@using BlazorSample.Domain
+
+@inject UserService UserService
+
+    <div class="card text-center" style="width: 248px; background-color:@BackgroundColor; color:@TextColor; @boxShadow; @Style;" @onpointerover="@OnHover" @onpointerout="@OnHoverExit">
+        <div id="content" class="d-flex flex-column">
+            <div id="image" style="" class="mb-2 card-header">
+                <Image Base64Data="@User.ImageBase64"
+                       DefaultImage="UserPlaceholder.jpg"
+                       StyleHeight="100px"
+                       StyleWidth="100px"
+                       Shape="circle"
+                       Style="@(imageShadow + "border:" + BackgroundColor)" />
+            </div>
+            <div class="m-2" style="">
+                <div class="font-weight-bolder">@(User.FirstName + " " + User.LastName)</div>
+                <div class="">
+                    @if (ShowDepartment)
+                    {
+                        <div class="font-weight-lighter">
+                            @User.Department
+                        </div>
+                    }
+                    <div class="font-weight-lighter">
+                        <span class="oi oi-phone mr-1"></span>@User.PhoneNumber
+                    </div>
+                    <div>@ChildContent</div>
+
+                </div>
+            </div>
+        </div>
+        <div class="card-footer">
+            <MatButton Raised="true" Style="@("background-color:" + BackgroundColor + ";color:" + TextColor)">Message</MatButton>
+            <MatButton OnClick="@( p => navigationManager.NavigateTo("mailto: "+ UserId +"@nnpp.net"))" Raised="true" Style="@("background-color:" + BackgroundColor + ";color:" + TextColor)">Email</MatButton>
+        </div>
+    </div>
+
+@code {
+
+    [Inject] NavigationManager navigationManager { get; set; }
+
+    private string boxShadow = "box-shadow: 0 1px 3px rgba(0,0,0,0.12), 0 1px 2px rgba(0,0,0,0.24);";
+    private string imageShadow = "box-shadow: 0 10px 20px rgba(0,0,0,0.19), 0 6px 6px rgba(0,0,0,0.23);";
+
+    [Parameter]
+    public string UserId { get; set; }
+
+    [Parameter]
+    public bool ShowDepartment { get; set; }
+
+    [Parameter]
+    public RenderFragment ChildContent { get; set; }
+
+    [Parameter]
+    public string TextColor { get; set; }
+
+    [Parameter]
+    public string BackgroundColor { get; set; }
+    public string originalBackgroundColor = "";
+
+    [Parameter]
+    public string Style { get; set; }
+
+    [Parameter]
+    public Action<PointerEventArgs> OnHover { get; set; }
+
+    [Parameter]
+    public Action<PointerEventArgs> OnHoverExit { get; set; }
+
+    public User User = new User();
+
+    protected override void OnInitialized()
+    {
+        originalBackgroundColor = BackgroundColor;
+        User = UserService.GetSingleUser(UserId);
+    }
+
+}

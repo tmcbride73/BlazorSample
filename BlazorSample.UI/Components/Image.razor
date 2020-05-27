@@ -1,0 +1,48 @@
+﻿<img src=@FormatImageSource()
+     style="object-fit: cover; width:@StyleWidth; height:@StyleHeight; @shapeCss; @Style"
+     class="@Class" />
+
+@code {
+    [Parameter]
+    public string Base64Data { get; set; }
+
+    [Parameter]
+    public string DefaultImage { get; set; }
+
+    [Parameter]
+    public string StyleWidth { get; set; }
+
+    [Parameter]
+    public string StyleHeight { get; set; }
+
+    [Parameter]
+    public string Style { get; set; }
+
+    [Parameter]
+    public string Class { get; set; }
+
+    [Parameter]
+    public string Shape { get; set; }
+
+    private string shapeCss = "";
+
+    protected override void OnInitialized()
+    {
+        if(Shape == "circle")
+        {
+            shapeCss = "border-radius: 50%;";
+        }
+    }
+
+    private string FormatImageSource()
+    {
+        if (string.IsNullOrWhiteSpace(Base64Data))
+        {
+            return DefaultImage;
+        }
+        else
+        {
+            return $"data:image/jpg;base64,{Base64Data}";
+        }
+    }
+}

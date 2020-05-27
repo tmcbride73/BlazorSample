@@ -1,0 +1,65 @@
+﻿@page "/users/create"
+
+@using BlazorSample.Domain
+@using BlazorSample.Application
+@using BlazorSample.UI.Components
+
+@inject UserService UserService
+@inject NavigationManager NavigationManager
+@inject IMatToaster Toaster
+
+<MatHeadline4>Create</MatHeadline4>
+
+<p>Create a new user.</p>
+
+<hr />
+<div class="d-flex justify-content-start">
+    <div class="">
+        <EditForm Model="user">
+            <p>
+                <MatTextField TValue="string" Label="User ID" @bind-Value="@user.UserId" Required="true"></MatTextField>
+            </p>
+            <p>
+                <MatTextField TValue="string" Label="First Name" @bind-Value="@user.FirstName" Required="true"></MatTextField>
+            </p>
+            <p>
+                <MatTextField TValue="string" Label="Last Name" @bind-Value="@user.LastName" Required="true"></MatTextField>
+            </p>
+            <p>
+                <MatTextField TValue="string" Label="Department" @bind-Value="@user.Department"></MatTextField>
+            </p>
+            <p>
+                <MatTextField TValue="string" Label="Phone Number" @bind-Value="@user.PhoneNumber"></MatTextField>
+            </p>
+            <p>
+                <MatDatePicker Style="width:215px" Label="Start Date" @bind-Value="@user.StartDate" Format="MMMM dd, yyyy"></MatDatePicker>
+            </p>
+        </EditForm>
+    </div>
+    <div class="ml-3">
+        <Image Base64Data="@user.ImageBase64"
+               DefaultImage="UserPlaceholder.jpg"
+               StyleHeight="200px"
+               StyleWidth="200px" />
+        <FileUploader @bind-FileBase64="@user.ImageBase64"></FileUploader>
+    </div>
+</div>
+
+<hr />
+
+<p>
+    <MatButton Raised="true" OnClick="SubmitForm"><MatIcon Style="margin-right:5px" Icon="@MatIconNames.Done" />  Submit</MatButton>
+</p>
+
+
+@code {
+    private User user = new User();
+    string fileName;
+
+    private void SubmitForm()
+    {
+        UserService.CreateNewUser(user);
+        Toaster.Add($"User {user.UserId} Created Successfully", MatToastType.Success);
+        NavigationManager.NavigateTo("/Users", false);
+    }
+}

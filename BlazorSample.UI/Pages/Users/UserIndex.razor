@@ -1,0 +1,77 @@
+﻿@page "/users"
+
+@using BlazorSample.Domain
+@using BlazorSample.Application
+
+@inject UserService UserService
+
+<MatHeadline3>User List</MatHeadline3>
+
+<MatBody1>Current list of users.</MatBody1>
+
+@if (users == null)
+{
+    <MatBody1><em>Loading...</em></MatBody1>
+}
+else
+{
+
+    <MatTableFilter TValue="User" @bind-Items="@users">
+        <MatTableFilterItem TValue="string" ForColumn="UserId" Label="User ID"></MatTableFilterItem>
+        <MatTableFilterItem TValue="string" ForColumn="FirstName" Label="First Name"></MatTableFilterItem>
+        <MatTableFilterItem TValue="string" ForColumn="LastName" Label="Last Name"></MatTableFilterItem>
+        <MatTableFilterItem TValue="string" ForColumn="Department" Label="Department"></MatTableFilterItem>
+        <MatTableFilterItem TValue="string" ForColumn="PhoneNumber" Label="Phone Number"></MatTableFilterItem>
+    </MatTableFilter>
+
+    <MatTable PageSize="12" Items="@users" LoadInitialData="true" Striped="true"
+              RequestApiOnlyOnce="true" AllowSelection="true" RowClass=""
+              ApiUrl="" DebounceMilliseconds="150" class=" w-100">
+        <MatTableHeader>
+            <th>Badge</th>
+            <th>User ID</th>
+            <th>First Name</th>
+            <th>Last Name</th>
+            <th>Department</th>
+            <th>Phone Number</th>
+            <th>Start Date</th>
+            <th>Controls</th>
+        </MatTableHeader>
+        <MatTableRow>
+            <td style="width:15%"><UserBadge BackgroundColor="rgba(53, 54, 58, 0.8)" TextColor="White" ShowDepartment="true" UserId="@context.UserId"></UserBadge></td>
+            <td style="width:15%">@context.UserId</td>
+            <td style="width:15%">@context.FirstName</td>
+            <td style="width:15%">@context.LastName</td>
+            <td style="width:15%">@context.Department</td>
+            <td style="width:15%">@context.PhoneNumber</td>
+            <td style="width:18%">
+                @if (context.StartDate.HasValue)
+                    {
+                    <text>@context.StartDate.Value.ToShortDateString() </text>
+                    }
+                /**/
+                /**/
+                /**/
+            </td>
+            <td style="width:unset">
+                <MatButton Raised="true" Link="@CreateViewLink(context)"><MatIcon Style="margin-right:5px" Icon="@MatIconNames.Visibility" />Details</MatButton>
+            </td>
+        </MatTableRow>
+    </MatTable>
+}
+
+@code {
+
+    private List<User> users;
+
+    protected override async Task OnInitializedAsync()
+    {
+        users = await UserService.GetUsersAsync();
+    }
+
+    private string CreateViewLink(User user)
+    {
+        return $"/users/view/{user.UserId}";
+    }
+
+}

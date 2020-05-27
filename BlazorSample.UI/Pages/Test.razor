@@ -1,0 +1,135 @@
+﻿@page "/Test"
+
+@inject IJSRuntime JSRuntime
+
+<h3>Test</h3>
+<hr />
+
+<p>
+    <MatHeadline6>Test JS Alert</MatHeadline6>
+</p>
+<p>
+    <MatTextField @bind-Value="@alertMessage"></MatTextField>
+</p>
+<p>
+    <MatButton @onclick="ShowAlert" Raised="true">Show Alert</MatButton>
+</p>
+
+<hr />
+<p>
+    <MatHeadline6>Test Jquery Sortable</MatHeadline6>
+</p>
+<ul id="sortable" style="list-style-type: none;">
+    <li>
+        <MatCard Style="width:400px; margin-bottom:20px">
+            <MatCardContent>
+                <MatCardMedia Wide="true" ImageUrl="https://material-components.github.io/material-components-web-catalog/static/media/photos/3x2/2.jpg"></MatCardMedia>
+                <div style="padding: 1rem;">
+                    <MatHeadline6 class="demo-mat-card-clean-margin">
+                        Our Changing Planet 1
+                    </MatHeadline6>
+                    <MatSubtitle2 class="demo-mat-card-clean-margin">
+                        by Kurt Wagner
+                    </MatSubtitle2>
+                </div>
+
+                <MatBody2 Style="padding: 1rem; margin: 0px;">
+                    Visit ten places on our planet that are undergoing the biggest changes today.
+                </MatBody2>
+            </MatCardContent>
+        </MatCard>
+    </li>
+    <li>
+        <MatCard Style="width:400px; margin-bottom:20px">
+            <MatCardContent>
+                <MatCardMedia Wide="true" ImageUrl="https://material-components.github.io/material-components-web-catalog/static/media/photos/3x2/2.jpg"></MatCardMedia>
+                <div style="padding: 1rem;">
+                    <MatHeadline6 class="demo-mat-card-clean-margin">
+                        Our Changing Planet 2
+                    </MatHeadline6>
+                    <MatSubtitle2 class="demo-mat-card-clean-margin">
+                        by Kurt Wagner
+                    </MatSubtitle2>
+                </div>
+
+                <MatBody2 Style="padding: 1rem; margin: 0px;">
+                    Visit ten places on our planet that are undergoing the biggest changes today.
+                </MatBody2>
+            </MatCardContent>
+        </MatCard>
+    </li>
+    <li>
+        <MatCard Style="width:400px; margin-bottom:20px">
+            <MatCardContent>
+                <MatCardMedia Wide="true" ImageUrl="https://material-components.github.io/material-components-web-catalog/static/media/photos/3x2/2.jpg"></MatCardMedia>
+                <div style="padding: 1rem;">
+                    <MatHeadline6 class="demo-mat-card-clean-margin">
+                        Our Changing Planet 3
+                    </MatHeadline6>
+                    <MatSubtitle2 class="demo-mat-card-clean-margin">
+                        by Kurt Wagner
+                    </MatSubtitle2>
+                </div>
+
+                <MatBody2 Style="padding: 1rem; margin: 0px;">
+                    Visit ten places on our planet that are undergoing the biggest changes today.
+                </MatBody2>
+            </MatCardContent>
+        </MatCard>
+    </li>
+    <li>
+        <MatCard Style="width:400px; margin-bottom:20px">
+            <MatCardContent>
+                <MatCardMedia Wide="true" ImageUrl="https://material-components.github.io/material-components-web-catalog/static/media/photos/3x2/2.jpg"></MatCardMedia>
+                <div style="padding: 1rem;">
+                    <MatHeadline6 class="demo-mat-card-clean-margin">
+                        Our Changing Planet 4
+                    </MatHeadline6>
+                    <MatSubtitle2 class="demo-mat-card-clean-margin">
+                        by Kurt Wagner
+                    </MatSubtitle2>
+                </div>
+
+                <MatBody2 Style="padding: 1rem; margin: 0px;">
+                    Visit ten places on our planet that are undergoing the biggest changes today.
+                </MatBody2>
+            </MatCardContent>
+        </MatCard>
+    </li>
+    <li>
+        <MatCard Style="width:400px; margin-bottom:20px">
+            <MatCardContent>
+                <MatCardMedia Wide="true" ImageUrl="https://material-components.github.io/material-components-web-catalog/static/media/photos/3x2/2.jpg"></MatCardMedia>
+                <div style="padding: 1rem;">
+                    <MatHeadline6 class="demo-mat-card-clean-margin">
+                        Our Changing Planet 5
+                    </MatHeadline6>
+                    <MatSubtitle2 class="demo-mat-card-clean-margin">
+                        by Kurt Wagner
+                    </MatSubtitle2>
+                </div>
+
+                <MatBody2 Style="padding: 1rem; margin: 0px;">
+                    Visit ten places on our planet that are undergoing the biggest changes today.
+                </MatBody2>
+            </MatCardContent>
+        </MatCard>
+    </li>
+</ul>
+
+@code {
+
+    private string alertMessage;
+
+    async Task ShowAlert()
+    {
+        await JSRuntime.InvokeVoidAsync("ShowAlert", alertMessage);
+    }
+
+    protected override async void OnAfterRender(bool firstRender)
+    {
+        await JSRuntime.InvokeVoidAsync("StartSortable");
+        base.OnAfterRender(firstRender);
+    }
+
+}

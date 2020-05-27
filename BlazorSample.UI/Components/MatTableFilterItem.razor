@@ -1,0 +1,56 @@
+﻿@using BlazorSample.Application
+@using BlazorSample.Domain
+
+@typeparam TValue
+
+@inject UserService UserService
+
+<MatTextField TValue="string" Label="@Label" @bind-Value="@Filter.Value" Icon="filter_list"></MatTextField>
+
+@code {
+
+    [Parameter]
+    public string Label { get; set; }
+
+    [Parameter]
+    public string Value { get; set; }
+
+    [Parameter]
+    public string ForColumn { get; set; }
+
+    public ColFilter Filter = new ColFilter();
+
+    [CascadingParameter]
+    public List<ColFilter> FilterList { get; set; }
+
+    [Parameter]
+    public EventCallback<string> ValueChanged { get; set; }
+
+    public EventCallback<List<ColFilter>> FilterListChanged { get; set; }
+
+    private Task OnValueChanged(ChangeEventArgs e)
+    {
+        Filter.Value = e.Value.ToString();
+        UpdateFilter();
+        return FilterListChanged.InvokeAsync(FilterList);
+    }
+
+    protected override void OnInitialized()
+    {
+        Filter.Name = ForColumn;
+        FilterList.Add(Filter);
+    }
+
+    private void UpdateFilter()
+    {
+        Filter.Value = Value;
+
+        foreach (var testFilter in FilterList)
+        {
+            if (testFilter.Name == Filter.Name)
+            {
+                testFilter.Value = Filter.Value;
+            }
+        }
+    }
+}

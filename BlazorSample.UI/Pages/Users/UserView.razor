@@ -1,0 +1,133 @@
+﻿@page "/users/view/{UserId}"
+
+@using BlazorSample.Domain
+@using BlazorSample.Application
+
+@inject UserService UserService
+@inject NavigationManager NavigationManager
+@inject IMatToaster Toaster
+
+@if (isViewing)
+{
+    <MatHeadline4>User @user.UserId</MatHeadline4>
+}
+else
+{
+    <MatHeadline4>Editing User - @user.UserId</MatHeadline4>
+}
+
+<p>
+    <MatButton Raised="true" Link="/users"><MatIcon Style="margin-right:5px" Icon="@MatIconNames.Arrow_left" />  Back to List</MatButton>
+</p>
+
+<hr />
+
+<div class="d-flex justify-content-start">
+    <div class="">
+        <EditForm Model="user" OnSubmit="SubmitForm">
+            <p>
+                <MatTextField TValue="string" Label="First Name" @bind-Value="@user.FirstName" ReadOnly="@isViewing"></MatTextField>
+            </p>
+            <p>
+                <MatTextField TValue="string" Label="Last Name" @bind-Value="@user.LastName" ReadOnly="@isViewing"></MatTextField>
+            </p>
+            <p>
+                <MatTextField TValue="string" Label="Department" @bind-Value="@user.Department" ReadOnly="@isViewing"></MatTextField>
+            </p>
+            <p>
+                <MatTextField TValue="string" Label="Phone Number" @bind-Value="@user.PhoneNumber" ReadOnly="@isViewing"></MatTextField>
+            </p>
+            <p>
+                <MatDatePicker Style="width:215px" Label="Start Date" @bind-Value="@user.StartDate" Format="MMMM dd, yyyy" ReadOnly="@isViewing"></MatDatePicker>
+            </p>
+        </EditForm>
+    </div>
+    <div class="ml-3">
+        <Image Base64Data="@user.ImageBase64"
+               DefaultImage="UserPlaceholder.jpg"
+               StyleHeight="200px"
+               StyleWidth="200px" />
+
+        @if (isViewing)
+        { }
+        else
+        {
+            <FileUploader @bind-FileBase64="@user.ImageBase64"></FileUploader>
+        }
+    </div>
+</div>
+
+<hr />
+
+<p>
+
+    @if (isViewing)
+    {
+        <MatButton Raised="true" OnClick="ToggleEditing"><MatIcon Style="margin-right:5px" Icon="@MatIconNames.Edit" />  Edit</MatButton>
+    }
+    else
+    {
+
+    <p>
+        <MatButton Raised="true" OnClick="ToggleEditing"><MatIcon Style="margin-right:5px" Icon="@MatIconNames.Cancel" />  Cancel Edit</MatButton>
+        <MatButton Style="background-color:darkred" Raised="true" OnClick="OpenDeleteDialog"><MatIcon Style="margin-right:5px" Icon="@MatIconNames.Delete" />  Delete</MatButton>
+    </p>
+    <p>
+        <MatButton Raised="true" OnClick="SubmitForm"><MatIcon Style="margin-right:5px" Icon="@MatIconNames.Done" />  Submit</MatButton>
+    </p>
+
+}
+    </p>
+
+    <MatDialog @bind-IsOpen="@deleteDialogIsOpen">
+        <MatDialogTitle>Are you Sure?</MatDialogTitle>
+        <MatDialogContent>
+            <p>Do you really want to delete @user.UserId</p>
+        </MatDialogContent>
+        <MatDialogActions>
+            <MatButton OnClick="@(e => { deleteDialogIsOpen = false; })" Style="margin-right:4px">Cancel</MatButton>
+            <MatButton OnClick="@DeleteUser">Delete</MatButton>
+        </MatDialogActions>
+    </MatDialog>
+
+    @code {
+        [Parameter] public string UserId { get; set; }
+
+        private User user = new User();
+        bool isViewing = true;
+        bool deleteDialogIsOpen = false;
+        string fileName;
+
+        protected override void OnInitialized()
+        {
+            user = UserService.GetSingleUser(UserId);
+        }
+
+        void SubmitForm()
+        {
+            UserService.UpdateUser(user);
+            Toaster.Add($"User {user.UserId} Updated Successfully", MatToastType.Success);
+            ToggleEditing();
+        }
+
+        void ToggleEditing()
+        {
+            isViewing = !isViewing;
+            if (isViewing)
+            {
+                user = UserService.GetSingleUser(UserId);
+            }
+        }
+
+        void DeleteUser()
+        {
+            UserService.DeleteUser(user);
+            Toaster.Add($"User {user.UserId} Deleted Successfully", MatToastType.Danger);
+            NavigationManager.NavigateTo("/Users", false);
+        }
+
+        void OpenDeleteDialog()
+        {
+            deleteDialogIsOpen = true;
+        }
+    }
