@@ -2,74 +2,79 @@
 @using BlazorSample.Domain
 
 @inject UserService UserService
-    <div class="d-flex justify-content-center" style="position:relative">
-        <div class="badge badge-pill" style="background-color:@BackgroundColor; color:@TextColor; @boxShadow" @onpointerover="OnHover" @onpointerout="OnHoverExit">
-            <div id="content" class="pr-2 d-flex justify-content-between">
-                <div id="image" style="margin-left:-4px" class="mr-2 align-self-center">
-                    <Image Base64Data="@User.ImageBase64"
-                           DefaultImage="UserPlaceholder.jpg"
-                           StyleHeight="40px"
-                           StyleWidth="40px"
-                           Shape="circle" />
-                </div>
-                <div id="text" class="align-self-center">
-                    <div>
-                        @(User.FirstName + " " + User.LastName)
+    <div class="d-flex flex-row">
+        <div class="d-flex justify-content-center" style="position:relative">
+            <div class="badge badge-pill" style="background-color:@BackgroundColor; color:@TextColor; @boxShadow" @onpointerover="OnHover" @onpointerout="OnHoverExit">
+                <div id="content" class="pr-2 d-flex justify-content-between">
+                    <div id="image" style="margin-left:-4px" class="mr-2 align-self-center">
+                        <Image Base64Data="@User.ImageBase64"
+                               DefaultImage="UserPlaceholder.jpg"
+                               StyleHeight="40px"
+                               StyleWidth="40px"
+                               Shape="circle" />
                     </div>
-                    @if (ShowDepartment)
-                    {
+                    <div id="text" class="align-self-center">
                         <div>
-                            @User.Department
+                            @(User.FirstName + " " + User.LastName)
                         </div>
-                    }
-                    <div>@ChildContent</div>
+                        @if (ShowDepartment)
+                        {
+                            <div>
+                                @User.Department
+                            </div>
+                        }
+                        <div>@ChildContent</div>
+                    </div>
                 </div>
             </div>
+            @if (isHovering)
+            {
+                <UserCard UserId="@UserId" BackgroundColor="@originalBackgroundColor" TextColor="@TextColor" ShowDepartment="@ShowDepartment" Style="position:absolute; top:45px; z-index:300" OnHover="@OnHover" OnHoverExit="@OnHoverExit"></UserCard>
+            }
         </div>
-        @if (isHovering)
-        {
-            <UserCard UserId="@UserId" BackgroundColor="@originalBackgroundColor" TextColor="@TextColor" Style="position:absolute; top:45px; z-index:300" OnHover="@OnHover" OnHoverExit="@OnHoverExit"></UserCard>
-        }
     </div>
 
-@code {
-    private string boxShadow = "box-shadow: 0 1px 3px rgba(0,0,0,0.12), 0 1px 2px rgba(0,0,0,0.24);";
-    private bool isHovering = false;
+    @code {
+        private string boxShadow = "box-shadow: 0 1px 3px rgba(0,0,0,0.12), 0 1px 2px rgba(0,0,0,0.24);";
+        private bool isHovering = false;
 
-    [Parameter]
-    public string UserId { get; set; }
+        [Parameter]
+        public bool ShowHoverPopup { get; set; } = true;
 
-    [Parameter]
-    public bool ShowDepartment { get; set; }
+        [Parameter]
+        public string UserId { get; set; }
 
-    [Parameter]
-    public RenderFragment ChildContent { get; set; }
+        [Parameter]
+        public bool ShowDepartment { get; set; } = false;
 
-    [Parameter]
-    public string TextColor { get; set; }
+        [Parameter]
+        public RenderFragment ChildContent { get; set; }
 
-    [Parameter]
-    public string BackgroundColor { get; set; }
-    public string originalBackgroundColor = "";
+        [Parameter]
+        public string TextColor { get; set; } = "white";
 
-    public User User = new User();
+        [Parameter]
+        public string BackgroundColor { get; set; } = "rgba(53, 54, 58, 0.8)";
+        public string originalBackgroundColor = "";
 
-    protected override void OnInitialized()
-    {
-        originalBackgroundColor = BackgroundColor;
-        User = UserService.GetSingleUser(UserId);
+        public User User = new User();
+
+        protected override void OnInitialized()
+        {
+            originalBackgroundColor = BackgroundColor;
+            User = UserService.GetSingleUser(UserId);
+        }
+
+        public void OnHover(PointerEventArgs e)
+        {
+            BackgroundColor = "red";
+            isHovering = true;
+        }
+
+        public void OnHoverExit(PointerEventArgs e)
+        {
+            BackgroundColor = originalBackgroundColor;
+            isHovering = false;
+        }
+
     }
-
-    public void OnHover(PointerEventArgs e)
-    {
-        BackgroundColor = "red";
-        isHovering = true;
-    }
-
-    public void OnHoverExit(PointerEventArgs e)
-    {
-        BackgroundColor = originalBackgroundColor;
-        isHovering = false;
-    }
-
-}
