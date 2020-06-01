@@ -10,12 +10,18 @@
                        DefaultImage="UserPlaceholder.jpg"
                        StyleHeight="100px"
                        StyleWidth="100px"
-                       Shape="circle"
+                       Shape="@ImageShape"
                        Style="@(imageShadow + "border:" + BackgroundColor)" />
             </div>
             <div class="m-2" style="">
                 <div class="font-weight-bolder">@(User.FirstName + " " + User.LastName)</div>
                 <div class="">
+                    @if (ShowUserId)
+                    {
+                        <div class="font-weight-lighter">
+                            <span class="oi oi-person mr-1"></span>@User.UserId.ToLower()
+                        </div>
+                    }
                     @if (ShowDepartment)
                     {
                         <div class="font-weight-lighter">
@@ -31,8 +37,8 @@
             </div>
         </div>
         <div class="card-footer">
-            <MatButton Raised="true" Style="@("background-color:" + BackgroundColor + ";color:" + TextColor)">Message</MatButton>
-            <MatButton OnClick="@( p => navigationManager.NavigateTo("mailto: "+ UserId +"@nnpp.net"))" Raised="true" Style="@("background-color:" + BackgroundColor + ";color:" + TextColor)">Email</MatButton>
+            <button class="btn" style="@("background-color:" + BackgroundColor + ";color:" + TextColor)">Message</button>
+            <button @onclick="@( p => navigationManager.NavigateTo("mailto: "+ UserId +"@nnpp.net"))" class="btn" style="@("background-color:" + BackgroundColor + ";color:" + TextColor)">Email</button>
         </div>
     </div>
 
@@ -47,16 +53,22 @@
     public string UserId { get; set; }
 
     [Parameter]
-    public bool ShowDepartment { get; set; }
+    public bool ShowUserId { get; set; } = true;
+
+    [Parameter]
+    public bool ShowDepartment { get; set; } = true;
 
     [Parameter]
     public RenderFragment ChildContent { get; set; }
 
     [Parameter]
-    public string TextColor { get; set; }
+    public string TextColor { get; set; } = "black";
 
     [Parameter]
-    public string BackgroundColor { get; set; }
+    public string ImageShape { get; set; } = "circle";
+
+    [Parameter]
+    public string BackgroundColor { get; set; } = "white";
     public string originalBackgroundColor = "";
 
     [Parameter]

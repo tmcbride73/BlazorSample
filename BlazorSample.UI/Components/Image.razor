@@ -1,5 +1,5 @@
 ﻿<img src=@FormatImageSource()
-     style="object-fit: cover; width:@StyleWidth; height:@StyleHeight; @shapeCss; @Style"
+     style="object-fit: cover; width:@StyleWidth; height:@StyleHeight; @shapeCss; @Style;"
      class="@Class" />
 
 @code {
@@ -31,6 +31,10 @@
         if(Shape == "circle")
         {
             shapeCss = "border-radius: 50%;";
+        }
+        else if(Shape == "rounded")
+        {
+            Class = Class + " rounded ";
         }
     }
 
