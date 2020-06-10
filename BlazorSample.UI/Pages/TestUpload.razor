@@ -1,0 +1,17 @@
+﻿@page "/TestUpload"
+
+@inject IFileReaderService fileReaderService
+
+<h3>Test Upload</h3>
+<hr />
+
+<Image @bind-Base64Data="@imageContent"></Image>
+
+<FileUploader2 @bind-FileBase64="@imageContent" />
+
+<DragnDropCommon @bind-FileBase64="@imageContent"></DragnDropCommon>
+
+@code
+{
+    string imageContent;
+}

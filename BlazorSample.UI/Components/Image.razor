@@ -5,6 +5,8 @@
 @code {
     [Parameter]
     public string Base64Data { get; set; }
+    [Parameter]
+    public EventCallback<string> Base64DataChanged { get; set; }
 
     [Parameter]
     public string DefaultImage { get; set; }
