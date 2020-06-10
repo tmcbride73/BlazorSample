@@ -9,6 +9,8 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using System.IO;
 using System.Net.Http;
+using BlazorPlus;
+using Blazor.FileReader;
 
 namespace BlazorSample
 {
@@ -27,7 +29,10 @@ namespace BlazorSample
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddRazorPages();
-            services.AddServerSideBlazor();
+            services.AddServerSideBlazor().AddHubOptions(o =>
+            {
+                o.MaximumReceiveMessageSize = 10 * 1024 * 1024; // 10MB
+            });
             //For Debugging
             //services.AddServerSideBlazor().AddCircuitOptions(options => { options.DetailedErrors = true; });
             services.AddMatToaster(config =>
@@ -55,7 +60,10 @@ namespace BlazorSample
                 return new UserRepository(mockDataLocation);
             });
             services.AddScoped<UserService>();
+            services.AddScoped<BlazorSession>();
             services.AddScoped<HttpClient>();
+            //services.AddScoped<IFileReaderService>();
+            services.AddFileReaderService();
             services.AddSignalR();
         }
 

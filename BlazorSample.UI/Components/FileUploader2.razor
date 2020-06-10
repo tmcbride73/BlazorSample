@@ -1,0 +1,54 @@
+﻿@inject IMatToaster Toaster
+
+@*<Image @bind-Base64Data="@FileBase64"></Image>*@
+
+<input type="file" @ref="inputReference" @onchange="async () => await chooseFileAsync()" />
+
+@code
+{
+    [Inject]
+    protected IFileReaderService fileReaderService { get; set; }
+
+    [Parameter]
+    public string FileBase64 { get; set; }
+    [Parameter]
+    public EventCallback<string> FileBase64Changed { get; set; }
+
+    string fileName = string.Empty;
+    string fileExtension = string.Empty;
+
+    ElementReference inputReference;
+    System.IO.Stream fileStream = null;
+
+    async Task chooseFileAsync()
+    {
+        // Read the file
+        var file = (await fileReaderService.CreateReference(inputReference).EnumerateFilesAsync()).FirstOrDefault();
+
+        // Read the info of the file
+        var fileInfo = await file.ReadFileInfoAsync();
+
+        if (fileInfo.Size > 10000000)
+        {
+            Toaster.Add($"File is too big", MatToastType.Warning);
+            return;
+        }
+
+        // Validate the extension
+        fileExtension = System.IO.Path.GetExtension(fileInfo.Name);
+        var allowedExtensions = new string[] { ".jpg", ".png", ".bmp" };
+
+        // Open the stream
+        using (var memoryStream = await file.CreateMemoryStreamAsync())
+        {
+            // Copy the content to a new stream
+            fileStream = new System.IO.MemoryStream(memoryStream.ToArray());
+            fileName = fileInfo.Name;
+
+            // Show the file in the UI
+            //FileBase64 = $"data:{fileInfo.Type};base64, {Convert.ToBase64String(memoryStream.ToArray())}";
+            FileBase64 = Convert.ToBase64String(memoryStream.ToArray());
+        }
+        StateHasChanged();
+    }
+}
